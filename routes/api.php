@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\ProviderController;
+use App\Http\Controllers\Client\ServiceRequestController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -20,12 +21,15 @@ Route::prefix('v1')->group(function () {
     });
 
     // Routes publiques
-    Route::get('/providers',     [ProviderController::class, 'index']);
-    Route::get('/providers/{id}',[ProviderController::class, 'show']);
+    Route::get('/providers',      [ProviderController::class, 'index']);
+    Route::get('/providers/{id}', [ProviderController::class, 'show']);
 
     // Routes protégées
     Route::middleware('auth:sanctum')->group(function () {
-        Route::get('/client/categories', [HomeController::class, 'categories']);
+        Route::get('/client/categories',        [HomeController::class, 'categories']);
+        Route::post('/client/requests',         [ServiceRequestController::class, 'store']);
+        Route::get('/client/requests',          [ServiceRequestController::class, 'index']);
+        Route::delete('/client/requests/{id}',  [ServiceRequestController::class, 'destroy']);
     });
 
 });
