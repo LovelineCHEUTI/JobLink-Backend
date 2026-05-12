@@ -34,14 +34,17 @@ Route::prefix('v1')->group(function () {
     Route::get('/providers',      [ProviderController::class, 'index']);
     Route::get('/providers/{id}', [ProviderController::class, 'show']);
 
-    // Routes Client
-    Route::middleware('auth:sanctum')->group(function () {
-        Route::get('/client/categories',        [HomeController::class, 'categories']);
-        Route::post('/client/requests',         [ServiceRequestController::class, 'store']);
-        Route::get('/client/requests',          [ServiceRequestController::class, 'index']);
-        Route::delete('/client/requests/{id}',  [ServiceRequestController::class, 'destroy']);
-        Route::post('/client/reviews',          [ReviewController::class, 'store']);
-    });
+    // Routes Client + Notifications
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/client/categories',        [HomeController::class, 'categories']);
+    Route::post('/client/requests',         [ServiceRequestController::class, 'store']);
+    Route::get('/client/requests',          [ServiceRequestController::class, 'index']);
+    Route::delete('/client/requests/{id}',  [ServiceRequestController::class, 'destroy']);
+    Route::post('/client/reviews',          [ReviewController::class, 'store']);
+    Route::get('/notifications',            [\App\Http\Controllers\Shared\NotificationController::class, 'index']);
+    Route::put('/notifications/read-all',   [\App\Http\Controllers\Shared\NotificationController::class, 'markAllAsRead']);
+    Route::put('/notifications/{id}/read',  [\App\Http\Controllers\Shared\NotificationController::class, 'markAsRead']);
+});
 
     // Routes Prestataire
     Route::middleware(['auth:sanctum', 'role:provider'])->group(function () {
